@@ -25,7 +25,7 @@ class Ingredient
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Recipe::class, mappedBy="Ingredients")
+     * @ORM\ManyToMany(targetEntity=Recipe::class, mappedBy="ingredients")
      * @ORM\JoinTable(
      *     name="recipe_ingredient",
      *     joinColumns={

@@ -165,9 +165,11 @@ class Recipe
 
     public function addIngredient(Ingredient $ingredient): self
     {
-        if (!$this->ingredients->contains($ingredient)) {
-            $this->ingredients[] = $ingredient;
-        }
+        if($this->ingredients != null) {
+            if (!$this->ingredients->contains($ingredient)) {
+                $this->ingredients[] = $ingredient;
+            }
+    }
 
         return $this;
     }

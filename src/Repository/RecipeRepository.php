@@ -19,6 +19,22 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
+    public function findLatest(){
+        return $this->createQueryBuilder('a')
+                    ->setMaxResults(10)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function findRandom() {
+        return $this->createQueryBuilder('a')        
+                    ->addSelect('RAND() as HIDDEN rand')
+                    ->addOrderBy('rand')
+                    ->setMaxResults(8)
+                   ->getQuery()
+                   ->getResult();
+    }
+
     // /**
     //  * @return Recipe[] Returns an array of Recipe objects
     //  */
