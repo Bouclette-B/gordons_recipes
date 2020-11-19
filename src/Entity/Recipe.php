@@ -49,9 +49,15 @@ class Recipe
      */
     private $createdAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Ingredient::class, inversedBy="recipes")
+     */
+    private $ingredients;
+
     public function __construct()
     {
         $this->steps = new ArrayCollection();
+        $this->Ingredients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +151,30 @@ class Recipe
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ingredient[]
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): self
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients[] = $ingredient;
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): self
+    {
+        $this->ingredients->removeElement($ingredient);
 
         return $this;
     }
