@@ -57,7 +57,7 @@ class Recipe
     public function __construct()
     {
         $this->steps = new ArrayCollection();
-        $this->Ingredients = new ArrayCollection();
+        $this->ingredients = new ArrayCollection();
     }
 
     public function getId(): ?int

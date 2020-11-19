@@ -12,10 +12,9 @@
             </div>
             <div class="col" style="text-align: right;">
                 <h4>Ingrédients</h4>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
+                {% for ingredient in recipe.ingredients %}
+                <p>{{ingredient.name}}</p>
+                {% endfor %}
             </div>
         </div>
         <div class="row">
