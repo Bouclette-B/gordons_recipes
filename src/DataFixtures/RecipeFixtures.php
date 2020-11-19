@@ -15,6 +15,7 @@ class RecipeFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = \Faker\Factory::create('fr_FR');
+        
         // Création des catégories
         for($i = 0; $i < 3; $i++) {
             $category = new Category;
@@ -25,32 +26,35 @@ class RecipeFixtures extends Fixture
             for($j = 0; $j < mt_rand(4, 6); $j++){
                 $recipe = new Recipe;
                 $recipe->setName($faker->sentence())
-                       ->setPicture($faker->imageUrl())
+                       ->setPicture("http://placehold.it/350x150")
                        ->setCategory($category)
                        ->setRating(mt_rand(0,5))
                        ->setCreatedAt($faker->dateTimeBetween('-6 months'));
-                $manager->persist($recipe);
-
+                $this->setReference('recipe'. $j, $recipe);
+                
                 // Création des ingrédients pour chaque recette
                 for($k = 0; $k < mt_rand(4, 6); $k ++) {
                     $ingredient = new Ingredient;
                     $ingredient->setName($faker->word())
-                            ->addRecipe($recipe);
-                    $manager->persist($recipe);
+                            ->addRecipe($this->getReference('recipe'. $j));
+                    $this->setReference('ingredient'. $j, $ingredient);
+                    $manager->persist($ingredient);
                 }
-
+                
                 // Création des étapes pour chaque recette
                 for($l =0; $l < mt_rand(2, 8); $l ++){
                     $step = new Step;
                     $step->setContent($faker->paragraph())
-                        ->setPicture($faker->imageUrl())
-                        ->setRecipe($recipe);
+                    ->setPicture("http://placehold.it/350x150")
+                    ->setRecipe($recipe);
                     $manager->persist($step);
                 }
-
+                
+                $manager->persist($recipe);
+                
                 // Création des commentaires pour chaque recette
                 // for($k = 0; $k < mt_rand(4, 6); $k++){
-                //     $comment = new Comment;
+                    //     $comment = new Comment;
                 //     $comment->setAuthor($faker->name())
                 //             ->setContent($faker->paragraph())
                 //             ->setCreatedAt($faker->dateTimeBetween('- 6 months'))

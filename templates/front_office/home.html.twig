@@ -4,10 +4,9 @@
 
 {% block body %}
     <div class="container">
-        <div class="jumbotron">
+        <div class="jumbotron jumbotron-home">
             <h1>Gordon's Recipe</h1>
-            <p class="lead">Découvrez et partagez de fabuleuses recettes ! It's gonna be Christmas in your mouth !</p>
-            <hr class="my-4">
+            <p class="lead"><em>Découvrez et partagez de fabuleuses recettes ! It's gonna be Christmas in your mouth !</em></p>
         </div>
     </div>
     <div class="container">
@@ -16,10 +15,16 @@
             {% for recipe in recipes %}
                 <div class="col-3">
                     <div class="card border-primary mb-3" style="max-width: 20rem;">
-                        <div class="card-header">{{ recipe.category.name }}</div>
+                    <img src="{{ recipe.picture }}" alt="Photo de la recette" class="card-img-top">
+                        <div class="card-header">{{ recipe.category.name }} - 
+                        {% for i in 1..recipe.rating %}
+                            <img src="./assets/img/chef-hat-icon2.png" alt="Icone toque de cuisinier" style="max-width: 20px;">
+                        {% endfor %}
+                        </div>
                         <div class="card-body">
-                            <h4 class="card-title">{{ recipe.name }}</h4>
+                            <h4 class="card-title">{{ recipe.name | u.truncate(30, '...') }}</h4>
                             <p class="card-text"><em><small>{{ recipe.createdAt | date("d/m/Y") }}</small></em></p>
+                            <a href="{{ path('recipe_show', {'id': recipe.id}) }}" class="btn btn-primary">Voir la recette</a>
                         </div>
                     </div>
                 </div>
