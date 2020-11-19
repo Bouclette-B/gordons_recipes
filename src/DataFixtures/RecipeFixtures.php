@@ -39,9 +39,14 @@ class RecipeFixtures extends Fixture
                     $ingredient = new Ingredient;
                     $ingredient->setName($faker->word())
                                 ->addRecipe($this->getReference('recipe'. $j));
+                    $this->setReference('ingredient', $ingredient);
                     
                     for($z = 0; $z < mt_rand(4, 6); $z ++) {
                         $quantity = new Quantity;
+                        $quantity -> setNumber($faker -> randomFloat($nbMaxDecimals = 2, $min = 0, $max = 2)) 
+                                 ->setUnity($faker -> word())
+                                 ->addIngredient($this->getReference('ingredient'));
+                                 $manager->persist($quantity);
                     }
                     $manager->persist($ingredient);
                 }

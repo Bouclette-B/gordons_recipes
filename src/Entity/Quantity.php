@@ -29,6 +29,11 @@ class Quantity
      */
     private $unity;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $number;
+
     public function __construct()
     {
         $this->ingredient = new ArrayCollection();
@@ -71,6 +76,18 @@ class Quantity
     public function setUnity(string $unity): self
     {
         $this->unity = $unity;
+
+        return $this;
+    }
+
+    public function getNumber(): ?float
+    {
+        return $this->number;
+    }
+
+    public function setNumber(float $number): self
+    {
+        $this->number = $number;
 
         return $this;
     }
