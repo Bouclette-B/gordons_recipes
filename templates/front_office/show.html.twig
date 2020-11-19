@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <img src="{{ recipe.picture }}" alt="recipe picture" />
+                <h2>{{ recipe.name }}</h2>
+            </div>
+            <div class="col" style="text-align: right;">
+                <h4>Ingrédients</h4>
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>Publiée le {{ recipe.createdAt | date('d/m/y')}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="row">Étapes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for step in recipe.steps %}
+                    <tr>
+                        <td>{{step.content | raw}}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="table-primary">
+                        <td></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <h4 style="text-align: right;">Commentaires</h4>
+        </div>
+    </div>
+</div>
+{% endblock %}
