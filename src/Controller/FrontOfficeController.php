@@ -23,7 +23,7 @@ class FrontOfficeController extends AbstractController
         $searchForm->handleRequest($request);
 
         if($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $recipes = $paginator->paginate($repo->findAll())
+            $recipes = $paginator->paginate($repo->findAll());
         }
         $recipes = $repo->findRandom();
         return $this->render('front_office/home.html.twig', [
@@ -40,6 +40,5 @@ class FrontOfficeController extends AbstractController
             'recipe' => $recipe,
         ]);
     }
+    }
 
-
-}
