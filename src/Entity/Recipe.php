@@ -54,10 +54,16 @@ class Recipe
      */
     private $ingredients;
 
+     /**
+     * @ORM\ManyToMany(targetEntity=Quantity::class, mappedBy="recipe")
+     */
+    private $quantity;
+
     public function __construct()
     {
         $this->steps = new ArrayCollection();
         $this->ingredients = new ArrayCollection();
+        $this->quantity = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,6 +183,32 @@ class Recipe
     public function removeIngredient(Ingredient $ingredient): self
     {
         $this->ingredients->removeElement($ingredient);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Quantity[]
+     */
+    public function getQuantity(): Collection
+    {
+        return $this->quantity;
+    }
+
+    public function addQuantity(Quantity $quantity): self
+    {
+        if ($this->quantity != null){
+            if (!$this->quantity->contains($quantity)) {
+                $this->quantity[] = $quantity;
+        }
+    }
+
+        return $this;
+    }
+
+    public function removeQuantity(Quantity $quantity): self
+    {
+        $this->quantity->removeElement($quantity);
 
         return $this;
     }
