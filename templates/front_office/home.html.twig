@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gordon's Recipe{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Gordon's Recipe</h1>
+            <p class="lead">Découvrez et partagez de fabuleuses recettes ! It's gonna be Christmas in your mouth !</p>
+            <hr class="my-4">
+        </div>
+    </div>
+    <div class="container">
+        <h2>Les dernières recettes publiées</h2>
+        <div class="row">
+            {% for recipe in recipes %}
+                <div class="col-3">
+                    <div class="card border-primary mb-3" style="max-width: 20rem;">
+                        <div class="card-header">{{ recipe.category.name }}</div>
+                        <div class="card-body">
+                            <h4 class="card-title">{{ recipe.name }}</h4>
+                            <p class="card-text"><em><small>{{ recipe.createdAt | date("d/m/Y") }}</small></em></p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+</div>
+{% endblock %}
