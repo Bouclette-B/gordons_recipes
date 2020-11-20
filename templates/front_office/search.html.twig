@@ -1,25 +1,39 @@
 {% extends "base.html.twig" %}
 {% block title %}Gordon's Recipes - Chercher un recette{% endblock %}
 
+{% block search %}{% endblock %}
+
 {% block body %}
     <div class="container">
-        <div class="row">
-            {% for recipe in recipes %}
-                <div class="col-3">
-                <div class="card border-primary mb-3" style="max-width: 20rem;">
-                <img src="{{ recipe.picture }}" alt="Photo de la recette" class="card-img-top">
-                    <div class="card-header">{{ recipe.category.name }} - 
-                    {% for i in 1..recipe.rating %}
-                        <img src="./assets/img/chef-hat-icon2.png" alt="Icone toque de cuisinier" style="max-width: 15px;">
-                    {% endfor %}
-                    </div>
-                    <div class="card-body">
-                        <h4 class="card-title">{{ recipe.name | u.truncate(30, '...') }}</h4>
-                        <p class="card-text"><em><small>{{ recipe.createdAt | date("d/m/Y") }}</small></em></p>
-                        <a href="{{ path('recipe_show', {'id': recipe.id}) }}" class="btn btn-primary">Voir la recette</a>
-                    </div>
+        <div class="jumbotron">
+            <h1>Trouvez LA recette de vos rêves !</h1>
+            <hr class="my-4">
+            <div class="row lead d-flex">
+                <div class="col-2">
+                    <p class="lead">Chercher par : </p>
                 </div>
-            {% endfor %}
+                <div class="col">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
+                                <label class="custom-control-label" for="customCheck1">Titre</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
+                                <label class="custom-control-label" for="customCheck2">Ingrédient</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck3" checked="">
+                                <label class="custom-control-label" for="customCheck3">Catégorie</label>
+                            </div>
+                        </div>  
+                    </fieldset>
+                </div>
+            </div> 
         </div>
     </div>
+{% if search != 'null' %}
+        {% include "/front_office/include.cards.html.twig" %}
+    {% endif %}
 {% endblock %}

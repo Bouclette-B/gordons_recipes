@@ -43,12 +43,14 @@
                         </div>
                     </li>
                 </ul>
+                {% block search %}
                 {{ form_start(search_form) }}
                 <div class="form-inline my-2 my-lg-0">
                     {{ form_row(search_form.name, {'attr' : {'placeholder': 'Chercher une recette...'} }) }}
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit">Miam !</button>
                 </div>
                 {{ form_end(search_form)}}
+                {% endblock %}
             </div>
         </nav>
         {% block body %}{% endblock %}
