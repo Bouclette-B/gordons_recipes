@@ -12,7 +12,9 @@ class QuickSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name');
+            ->add('name', null, [
+                'label' => false,
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

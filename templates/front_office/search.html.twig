@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block title %}Gordon's Recipes - Chercher un recette{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% for recipe in recipes %}
+                <div class="col-3">
+                <div class="card border-primary mb-3" style="max-width: 20rem;">
+                <img src="{{ recipe.picture }}" alt="Photo de la recette" class="card-img-top">
+                    <div class="card-header">{{ recipe.category.name }} - 
+                    {% for i in 1..recipe.rating %}
+                        <img src="./assets/img/chef-hat-icon2.png" alt="Icone toque de cuisinier" style="max-width: 15px;">
+                    {% endfor %}
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">{{ recipe.name | u.truncate(30, '...') }}</h4>
+                        <p class="card-text"><em><small>{{ recipe.createdAt | date("d/m/Y") }}</small></em></p>
+                        <a href="{{ path('recipe_show', {'id': recipe.id}) }}" class="btn btn-primary">Voir la recette</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

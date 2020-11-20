@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Gordon's Recipe{% endblock %}
+{% block nabrandLogo %}./assets/img/logo.svg{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -18,7 +19,7 @@
                     <img src="{{ recipe.picture }}" alt="Photo de la recette" class="card-img-top">
                         <div class="card-header">{{ recipe.category.name }} - 
                         {% for i in 1..recipe.rating %}
-                            <img src="./assets/img/chef-hat-icon2.png" alt="Icone toque de cuisinier" style="max-width: 20px;">
+                            <img src="./assets/img/chef-hat-icon2.png" alt="Icone toque de cuisinier" style="max-width: 15px;">
                         {% endfor %}
                         </div>
                         <div class="card-body">
@@ -30,5 +31,5 @@
                 </div>
             {% endfor %}
         </div>
-</div>
+    </div>
 {% endblock %}

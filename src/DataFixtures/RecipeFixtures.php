@@ -16,11 +16,6 @@ class RecipeFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = \Faker\Factory::create('fr_FR');
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 0cb17c8b24ad0a18ad4d1e6f19b72dd51134f3eb
         // Création des catégories
         for($i = 0; $i < 3; $i++) {
             $category = new Category;
@@ -36,20 +31,12 @@ class RecipeFixtures extends Fixture
                        ->setRating(mt_rand(0,5))
                        ->setCreatedAt($faker->dateTimeBetween('-6 months'));
                 $this->setReference('recipe'. $j, $recipe);
-<<<<<<< HEAD
-                
-=======
     
 
->>>>>>> 0cb17c8b24ad0a18ad4d1e6f19b72dd51134f3eb
                 // Création des ingrédients pour chaque recette
                 for($k = 0; $k < mt_rand(4, 6); $k ++) {
                     $ingredient = new Ingredient;
                     $ingredient->setName($faker->word())
-<<<<<<< HEAD
-                            ->addRecipe($this->getReference('recipe'. $j));
-                    $this->setReference('ingredient'. $j, $ingredient);
-=======
                                 ->addRecipe($this->getReference('recipe'. $j));
                     $this->setReference('ingredient', $ingredient);
                     
@@ -60,7 +47,6 @@ class RecipeFixtures extends Fixture
                                  ->addIngredient($this->getReference('ingredient'));
                                  $manager->persist($quantity);
                     }
->>>>>>> 0cb17c8b24ad0a18ad4d1e6f19b72dd51134f3eb
                     $manager->persist($ingredient);
                 }
                 
@@ -68,13 +54,8 @@ class RecipeFixtures extends Fixture
                 for($l =0; $l < mt_rand(2, 8); $l ++){
                     $step = new Step;
                     $step->setContent($faker->paragraph())
-<<<<<<< HEAD
-                    ->setPicture("http://placehold.it/350x150")
-                    ->setRecipe($recipe);
-=======
                         ->setPicture("http://placehold.it/350x150")
                         ->setRecipe($recipe);
->>>>>>> 0cb17c8b24ad0a18ad4d1e6f19b72dd51134f3eb
                     $manager->persist($step);
                 }
                 

@@ -35,12 +35,12 @@ class RecipeRepository extends ServiceEntityRepository
                    ->getResult();
     }
 
-    public function displayRating() {
-        $ratingDisplay = '';
-        for($i = 0; $i <= $this->rating; $i++) {
-            $ratingDisplay. '<img src="./assets/img/chef-hat-icon.svg." alt="Icone toque de cuisinier"></br>';
-        }
-        return $ratingDisplay;
+    public function findByName(string $value) {
+        return $this->createQueryBuilder('a')
+                    ->where('a.name LIKE :value')
+                    ->setParameter('value', "%$value%")
+                    ->orderBy('a.createdAt', 'DESC')
+                    ->getQuery();
     }
 
     // /**
