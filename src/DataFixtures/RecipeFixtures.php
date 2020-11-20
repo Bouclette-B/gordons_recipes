@@ -8,13 +8,17 @@ use App\Entity\Ingredient;
 use App\Entity\Quantity;
 use App\Entity\Recipe;
 use App\Entity\Step;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 class RecipeFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+
         $faker = \Faker\Factory::create('fr_FR');
 
         // Création des catégories
@@ -30,6 +34,7 @@ class RecipeFixtures extends Fixture
                        ->setPicture("http://placehold.it/350x150")
                        ->setCategory($category)
                        ->setRating(mt_rand(0,5))
+                       ->setPeople(mt_rand(1,5))
                        ->setCreatedAt($faker->dateTimeBetween('-6 months'));
                 $this->setReference('recipe'. $j, $recipe);
     
@@ -38,18 +43,10 @@ class RecipeFixtures extends Fixture
                 for($k = 0; $k < mt_rand(4, 6); $k ++) {
                     $ingredient = new Ingredient;
                     $ingredient->setName($faker->word())
-                                ->addRecipe($this->getReference('recipe'. $j));
+                                ->setRecipe($this->getReference('recipe'. $j))
+                                -> setQuantity(($faker -> randomFloat($nbMaxDecimals = 2, $min = 0, $max = 2)))
+                                ->setMeasurement($faker -> word());
                     $this->setReference('ingredient', $ingredient);
-                    
-                    // Création des quantités pour chaque ingrédient
-                    
-                        $quantity = new Quantity;
-                        $quantity -> setNumber($faker -> randomFloat($nbMaxDecimals = 2, $min = 0, $max = 2)) 
-                                 ->setUnity($faker -> word())
-                                 ->addIngredient($this->getReference('ingredient'))
-                                 ->addRecipe($this->getReference('recipe'. $j));
-                                 
-                    $manager->persist($quantity);
                     $manager->persist($ingredient);
                 }
 
@@ -62,15 +59,15 @@ class RecipeFixtures extends Fixture
                     $manager->persist($step);
                 }
 
-                // Création des commentaires pour chaque recette
-                // for($k = 0; $k < mt_rand(4, 6); $k++){
-                //     $comment = new Comment;
-                //     $comment->setAuthor($faker->name())
-                //             ->setContent($faker->paragraph())
-                //             ->setCreatedAt($faker->dateTimeBetween('- 6 months'))
-                //             ->setRecipe($recipe);
-                //     $manager->persist($comment);
-                // }
+                //Création des commentaires pour chaque recette
+                for($k = 0; $k < mt_rand(4, 6); $k++){
+                    $comment = new Comment;
+                    $comment->setAuthor($faker->name())
+                            ->setContent($faker->paragraph())
+                            ->setCreatedAt($faker->dateTimeBetween('- 6 months'))
+                            ->setRecipe($recipe);
+                    $manager->persist($comment);
+                }
                 $manager->persist($recipe);
             }
 

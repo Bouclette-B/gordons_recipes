@@ -50,22 +50,40 @@ class Recipe
     private $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Ingredient::class, inversedBy="recipes")
+     * @ORM\OneToMany(targetEntity=Ingredient::class, mappedBy="recipe", orphanRemoval=true)
      */
     private $ingredients;
 
-     /**
-     * @ORM\ManyToMany(targetEntity=Quantity::class, mappedBy="recipe")
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="recipe", orphanRemoval=true)
      */
-    private $quantity;
+    private $comments;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $people;
+
+    
     public function __construct()
     {
         $this->steps = new ArrayCollection();
         $this->ingredients = new ArrayCollection();
         $this->quantity = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
+
+
+    public function changeQuantity($people){
+        $defaultPeople = $this -> getPeople();
+
+        foreach($this -> getIngredients() as $ingredient){
+         $quantity = ($ingredient -> getQuantity()) / $defaultPeople;
+         $quantity = round($quantity * $people, 2);
+         $ingredient -> setQuantity($quantity);
+        }
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -171,44 +189,64 @@ class Recipe
 
     public function addIngredient(Ingredient $ingredient): self
     {
-        if ($this->ingredients != null){
-            if (!$this->ingredients->contains($ingredient)) {
-                $this->ingredients[] = $ingredient;
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients[] = $ingredient;
+            $ingredient->setRecipe($this);
         }
-    }
 
         return $this;
     }
 
     public function removeIngredient(Ingredient $ingredient): self
     {
-        $this->ingredients->removeElement($ingredient);
+        if ($this->ingredients->removeElement($ingredient)) {
+            // set the owning side to null (unless already changed)
+            if ($ingredient->getRecipe() === $this) {
+                $ingredient->setRecipe(null);
+            }
+        }
 
         return $this;
     }
 
     /**
-     * @return Collection|Quantity[]
+     * @return Collection|Comment[]
      */
-    public function getQuantity(): Collection
+    public function getComments(): Collection
     {
-        return $this->quantity;
+        return $this->comments;
     }
 
-    public function addQuantity(Quantity $quantity): self
+    public function addComment(Comment $comment): self
     {
-        if ($this->quantity != null){
-            if (!$this->quantity->contains($quantity)) {
-                $this->quantity[] = $quantity;
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setRecipe($this);
         }
-    }
 
         return $this;
     }
 
-    public function removeQuantity(Quantity $quantity): self
+    public function removeComment(Comment $comment): self
     {
-        $this->quantity->removeElement($quantity);
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getRecipe() === $this) {
+                $comment->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPeople(): ?int
+    {
+        return $this->people;
+    }
+
+    public function setPeople(int $people): self
+    {
+        $this->people = $people;
 
         return $this;
     }

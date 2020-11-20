@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\IngredientRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,29 +23,20 @@ class Ingredient
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Recipe::class, mappedBy="ingredients")
-     * @ORM\JoinTable(
-     *     name="recipe_ingredient",
-     *     joinColumns={
-     *          @ORM\JoinColumn(name="recipe_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *          @ORM\JoinColumn(name="ingredient_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\Column(type="float")
      */
-    private $recipes;
+    private $quantity;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Quantity::class, mappedBy="ingredient")
+     * @ORM\ManyToOne(targetEntity=Recipe::class, inversedBy="ingredients")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $quantities;
+    private $recipe;
 
-    public function __construct()
-    {
-        $this->recipes = new ArrayCollection();
-        $this->quantities = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $measurement;
 
     public function getId(): ?int
     {
@@ -66,56 +55,38 @@ class Ingredient
         return $this;
     }
 
-    /**
-     * @return Collection|Recipe[]
-     */
-    public function getRecipes(): Collection
+    public function getQuantity(): ?float
     {
-        return $this->recipes;
+        return $this->quantity;
     }
 
-    public function addRecipe(Recipe $recipe): self
+    public function setQuantity(float $quantity): self
     {
-        if (!$this->recipes->contains($recipe)) {
-            $this->recipes[] = $recipe;
-            $recipe->addIngredient($this);
-        }
+        $this->quantity = $quantity;
 
         return $this;
     }
 
-    public function removeRecipe(Recipe $recipe): self
+    public function getRecipe(): ?Recipe
     {
-        if ($this->recipes->removeElement($recipe)) {
-            $recipe->removeIngredient($this);
-        }
+        return $this->recipe;
+    }
+
+    public function setRecipe(?Recipe $recipe): self
+    {
+        $this->recipe = $recipe;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Quantity[]
-     */
-    public function getQuantities(): Collection
+    public function getMeasurement(): ?string
     {
-        return $this->quantities;
+        return $this->measurement;
     }
 
-    public function addQuantity(Quantity $quantity): self
+    public function setMeasurement(string $measurement): self
     {
-        if (!$this->quantities->contains($quantity)) {
-            $this->quantities[] = $quantity;
-            $quantity->addIngredient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuantity(Quantity $quantity): self
-    {
-        if ($this->quantities->removeElement($quantity)) {
-            $quantity->removeIngredient($this);
-        }
+        $this->measurement = $measurement;
 
         return $this;
     }
