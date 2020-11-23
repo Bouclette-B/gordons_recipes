@@ -54,11 +54,6 @@ class Recipe
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Ingredient::class, mappedBy="recipe", orphanRemoval=true)
-     */
-    private $ingredients;
-
-    /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="recipe", orphanRemoval=true)
      */
     private $comments;
@@ -68,13 +63,23 @@ class Recipe
      */
     private $people;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Quantity::class, mappedBy="recipe", orphanRemoval=true)
+     */
+    private $quantities;
+
+    /**
+     * @ORM\Column(type="integer", options={"default": 0})
+     */
+    private $voters;
+
     
     public function __construct()
     {
         $this->steps = new ArrayCollection();
-        $this->ingredients = new ArrayCollection();
         $this->quantity = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->quantities = new ArrayCollection();
     }
 
 
@@ -183,35 +188,6 @@ class Recipe
         return $this;
     }
 
-    /**
-     * @return Collection|Ingredient[]
-     */
-    public function getIngredients(): Collection
-    {
-        return $this->ingredients;
-    }
-
-    public function addIngredient(Ingredient $ingredient): self
-    {
-        if (!$this->ingredients->contains($ingredient)) {
-            $this->ingredients[] = $ingredient;
-            $ingredient->setRecipe($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIngredient(Ingredient $ingredient): self
-    {
-        if ($this->ingredients->removeElement($ingredient)) {
-            // set the owning side to null (unless already changed)
-            if ($ingredient->getRecipe() === $this) {
-                $ingredient->setRecipe(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Comment[]
@@ -251,6 +227,48 @@ class Recipe
     public function setPeople(int $people): self
     {
         $this->people = $people;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Quantity[]
+     */
+    public function getQuantities(): Collection
+    {
+        return $this->quantities;
+    }
+
+    public function addQuantity(Quantity $quantity): self
+    {
+        if (!$this->quantities->contains($quantity)) {
+            $this->quantities[] = $quantity;
+            $quantity->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuantity(Quantity $quantity): self
+    {
+        if ($this->quantities->removeElement($quantity)) {
+            // set the owning side to null (unless already changed)
+            if ($quantity->getRecipe() === $this) {
+                $quantity->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getVoters(): ?int
+    {
+        return $this->voters;
+    }
+
+    public function setVoters(int $voters): self
+    {
+        $this->voters = $voters;
 
         return $this;
     }

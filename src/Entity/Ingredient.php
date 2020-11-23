@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\IngredientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,20 +25,14 @@ class Ingredient
     private $name;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\OneToMany(targetEntity=Quantity::class, mappedBy="ingredient", orphanRemoval=true)
      */
-    private $quantity;
+    private $quantities;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Recipe::class, inversedBy="ingredients")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $recipe;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $measurement;
+    public function __construct()
+    {
+        $this->quantities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -55,39 +51,37 @@ class Ingredient
         return $this;
     }
 
-    public function getQuantity(): ?float
+    /**
+     * @return Collection|Quantity[]
+     */
+    public function getQuantities(): Collection
     {
-        return $this->quantity;
+        return $this->quantities;
     }
 
-    public function setQuantity(float $quantity): self
+    public function addQuantity(Quantity $quantity): self
     {
-        $this->quantity = $quantity;
+        if (!$this->quantities->contains($quantity)) {
+            $this->quantities[] = $quantity;
+            $quantity->setIngredient($this);
+        }
 
         return $this;
     }
 
-    public function getRecipe(): ?Recipe
+    public function removeQuantity(Quantity $quantity): self
     {
-        return $this->recipe;
-    }
-
-    public function setRecipe(?Recipe $recipe): self
-    {
-        $this->recipe = $recipe;
+        if ($this->quantities->removeElement($quantity)) {
+            // set the owning side to null (unless already changed)
+            if ($quantity->getIngredient() === $this) {
+                $quantity->setIngredient(null);
+            }
+        }
 
         return $this;
     }
 
-    public function getMeasurement(): ?string
-    {
-        return $this->measurement;
-    }
-
-    public function setMeasurement(string $measurement): self
-    {
-        $this->measurement = $measurement;
-
-        return $this;
+    public function hydrate(array $ingredient) {
+        $this ->setName($ingredient['name']);
     }
 }
