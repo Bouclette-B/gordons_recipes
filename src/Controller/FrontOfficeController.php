@@ -34,7 +34,6 @@ class FrontOfficeController extends AbstractController
         }
     }
  
-
          /**
          * @Route("/recipe/{id}/{people}", name="recipe_show")
          */

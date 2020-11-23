@@ -18,6 +18,8 @@ use Symfony\Component\Serializer\Serializer;
 
 class IngredientFixtures extends Fixture
 {
+    public const INGREDIENT_REFERENCE = "ingredient";
+
     public function load(ObjectManager $manager) {
 
         $faker = \Faker\Factory::create('fr_FR');
@@ -28,6 +30,8 @@ class IngredientFixtures extends Fixture
             $ingredient->setName($faker->word());
             $manager->persist($ingredient);
             $manager -> flush();
+
+            $this->addReference(self::INGREDIENT_REFERENCE, $ingredient);
         }
     }
 }
@@ -68,17 +72,13 @@ class RecipeFixtures extends Fixture
 
                 // Création des quantités pour chaque recette
                 for($k = 0; $k < mt_rand(4, 6); $k ++) {
-                    $ingredientData = $this->ingredientRepo -> findRandom();
-                    $ingredient = new Ingredient;
-                    $ingredient -> hydrate($ingredientData);
                     $quantity = new Quantity;
                     $quantity->setAmount(($faker -> randomFloat($nbMaxDecimals = 2, $min = 0, $max = 2)))
                                 ->setRecipe($this->getReference('recipe'. $j))
-                                -> setAmount(($faker -> randomFloat($nbMaxDecimals = 2, $min = 0, $max = 2)))
+                                -> setAmount($faker -> randomFloat($nbMaxDecimals = 2, $min = 0, $max = 2))
                                 ->setMeasurement($faker -> word())
-                                -> setIngredient(spl_object_hash($ingredient));
-                    $this->setReference('ingredient', $ingredient);
-                    $manager->persist($ingredient);
+                                -> setIngredient($this->getReference(IngredientFixtures::INGREDIENT_REFERENCE));
+                    $manager->persist($quantity);
                 }
                 
                 // Création des étapes pour chaque recette
