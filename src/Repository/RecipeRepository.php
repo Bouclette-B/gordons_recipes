@@ -26,11 +26,11 @@ class RecipeRepository extends ServiceEntityRepository
                     ->getResult();
     }
 
-    public function findRandom() {
+    public function findRandom($maxResult) {
         return $this->createQueryBuilder('a')        
                     ->addSelect('RAND() as HIDDEN rand')
                     ->addOrderBy('rand')
-                    ->setMaxResults(8)
+                    ->setMaxResults($maxResult)
                    ->getQuery()
                    ->getResult();
     }

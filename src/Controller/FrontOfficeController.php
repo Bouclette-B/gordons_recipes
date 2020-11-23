@@ -16,13 +16,13 @@ class FrontOfficeController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function home(PaginatorInterface $paginator, RecipeRepository $repo, Request $request): Response
+    public function home(RecipeRepository $repo, Request $request): Response
     {
         $searchForm = $this->createQuickSearchForm($request);
         if($searchForm->isSubmitted() && $searchForm->isValid()) {
             return $this->processQuickSearchForm($searchForm);
         } else {
-            $recipes = $repo->findRandom();
+            $recipes = $repo->findRandom(1);
             return $this->render('front_office/home.html.twig', [
                 'recipes' => $recipes,
                 'search_form' => $searchForm->createView(),
