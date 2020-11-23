@@ -20,7 +20,6 @@ class RecipeFixtures extends Fixture
     {
 
         $faker = \Faker\Factory::create('fr_FR');
-
         // Création des catégories
         for($i = 0; $i < 3; $i++) {
             $category = new Category;
@@ -49,7 +48,7 @@ class RecipeFixtures extends Fixture
                     $this->setReference('ingredient', $ingredient);
                     $manager->persist($ingredient);
                 }
-
+                
                 // Création des étapes pour chaque recette
                 for($l =0; $l < mt_rand(2, 8); $l ++){
                     $step = new Step;

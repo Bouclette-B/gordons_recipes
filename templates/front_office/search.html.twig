@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+{% block title %}Gordon's Recipes - Chercher un recette{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Trouvez LA recette de vos rêves !</h1>
+            <hr class="my-4">
+            <div class="row lead d-flex">
+                <div class="col-2">
+                    <p class="lead">Chercher par : </p>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
+                                <label class="custom-control-label" for="customCheck1">Titre</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
+                                <label class="custom-control-label" for="customCheck2">Ingrédient</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck3" checked="">
+                                <label class="custom-control-label" for="customCheck3">Catégorie</label>
+                            </div>
+                        </div>  
+                    </fieldset>
+                </div>
+            </div> 
+        </div>
+    </div>
+{% if search != 'null' %}
+        {% include "/front_office/include.cards.html.twig" %}
+    {% endif %}
+{% endblock %}

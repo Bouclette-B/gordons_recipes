@@ -35,6 +35,14 @@ class RecipeRepository extends ServiceEntityRepository
                    ->getResult();
     }
 
+    public function findByName(string $value) {
+        return $this->createQueryBuilder('a')
+                    ->where('a.name LIKE :value')
+                    ->setParameter('value', "%$value%")
+                    ->orderBy('a.createdAt', 'DESC')
+                    ->getQuery();
+    }
+
     // /**
     //  * @return Recipe[] Returns an array of Recipe objects
     //  */
