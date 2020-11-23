@@ -16,26 +16,8 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 
-class IngredientFixtures extends Fixture
-{
-    public const INGREDIENT_REFERENCE = "ingredient";
 
-    public function load(ObjectManager $manager) {
-
-        $faker = \Faker\Factory::create('fr_FR');
-
-        // Ingrédients
-        for($k = 0; $k < mt_rand(4, 6); $k ++) {
-            $ingredient = new Ingredient;
-            $ingredient->setName($faker->word());
-            $manager->persist($ingredient);
-            $manager -> flush();
-
-            $this->addReference(self::INGREDIENT_REFERENCE, $ingredient);
-        }
-    }
-}
-
+    
 class RecipeFixtures extends Fixture
 {
 
@@ -49,7 +31,16 @@ class RecipeFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
 
+        $numIngredient = mt_rand(4, 6);
         $faker = \Faker\Factory::create('fr_FR');
+
+        // Ingrédients
+        for($z = 0; $z <= $numIngredient; $z ++) {
+            $ingredient = new Ingredient;
+            $ingredient->setName($faker->word());
+            $manager->persist($ingredient);
+            $this->setReference('ingredient'. $z, $ingredient);           
+        }
 
         // Création des catégories
         for($i = 0; $i < 3; $i++) {
@@ -77,7 +68,7 @@ class RecipeFixtures extends Fixture
                                 ->setRecipe($this->getReference('recipe'. $j))
                                 -> setAmount($faker -> randomFloat($nbMaxDecimals = 2, $min = 0, $max = 2))
                                 ->setMeasurement($faker -> word())
-                                -> setIngredient($this->getReference(IngredientFixtures::INGREDIENT_REFERENCE));
+                                -> setIngredient($this->getReference('ingredient'. mt_rand(0,$numIngredient)));
                     $manager->persist($quantity);
                 }
                 
@@ -91,7 +82,7 @@ class RecipeFixtures extends Fixture
                 }
 
                 //Création des commentaires pour chaque recette
-                for($k = 0; $k < mt_rand(4, 6); $k++){
+                for($c = 0; $c < mt_rand(4, 6); $c++){
                     $comment = new Comment;
                     $comment->setAuthor($faker->name())
                             ->setContent($faker->paragraph())
@@ -106,3 +97,4 @@ class RecipeFixtures extends Fixture
         $manager->flush();
     }
 }
+
