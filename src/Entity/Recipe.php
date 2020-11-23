@@ -54,16 +54,45 @@ class Recipe
     private $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Ingredient::class, inversedBy="recipes")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="recipe", orphanRemoval=true)
      */
-    private $ingredients;
+    private $comments;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $people;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Quantity::class, mappedBy="recipe", orphanRemoval=true)
+     */
+    private $quantities;
+
+    /**
+     * @ORM\Column(type="integer", options={"default": 0})
+     */
+    private $voters;
+
+    
     public function __construct()
     {
         $this->steps = new ArrayCollection();
-        $this->ingredients = new ArrayCollection();
+        $this->quantity = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->quantities = new ArrayCollection();
     }
 
+
+
+    public function changeQuantity($people){
+        $defaultPeople = $this -> getPeople();
+
+        foreach($this -> getIngredients() as $ingredient){
+         $quantity = ($ingredient -> getQuantity()) / $defaultPeople;
+         $quantity = round($quantity * $people, 2);
+         $ingredient -> setQuantity($quantity);
+        }
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -159,28 +188,87 @@ class Recipe
         return $this;
     }
 
+
     /**
-     * @return Collection|Ingredient[]
+     * @return Collection|Comment[]
      */
-    public function getIngredients(): Collection
+    public function getComments(): Collection
     {
-        return $this->ingredients;
+        return $this->comments;
     }
 
-    public function addIngredient(Ingredient $ingredient): self
+    public function addComment(Comment $comment): self
     {
-        if ($this->ingredients != null){
-            if (!$this->ingredients->contains($ingredient)) {
-                $this->ingredients[] = $ingredient;
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setRecipe($this);
         }
-    }
 
         return $this;
     }
 
-    public function removeIngredient(Ingredient $ingredient): self
+    public function removeComment(Comment $comment): self
     {
-        $this->ingredients->removeElement($ingredient);
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getRecipe() === $this) {
+                $comment->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPeople(): ?int
+    {
+        return $this->people;
+    }
+
+    public function setPeople(int $people): self
+    {
+        $this->people = $people;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Quantity[]
+     */
+    public function getQuantities(): Collection
+    {
+        return $this->quantities;
+    }
+
+    public function addQuantity(Quantity $quantity): self
+    {
+        if (!$this->quantities->contains($quantity)) {
+            $this->quantities[] = $quantity;
+            $quantity->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuantity(Quantity $quantity): self
+    {
+        if ($this->quantities->removeElement($quantity)) {
+            // set the owning side to null (unless already changed)
+            if ($quantity->getRecipe() === $this) {
+                $quantity->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getVoters(): ?int
+    {
+        return $this->voters;
+    }
+
+    public function setVoters(int $voters): self
+    {
+        $this->voters = $voters;
 
         return $this;
     }

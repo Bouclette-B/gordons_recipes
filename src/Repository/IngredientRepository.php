@@ -19,6 +19,16 @@ class IngredientRepository extends ServiceEntityRepository
         parent::__construct($registry, Ingredient::class);
     }
 
+
+    public function findRandom() {
+        $result =  $this->createQueryBuilder('a')        
+                    ->addSelect('RAND() as HIDDEN rand')
+                    ->setMaxResults(2)
+                    ->getQuery()
+                    ->getResult();
+        return $result;
+    }
+
     // /**
     //  * @return Ingredient[] Returns an array of Ingredient objects
     //  */

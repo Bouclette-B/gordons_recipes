@@ -13,7 +13,7 @@
                         <div class="card-body">
                             <h4 class="card-title">{{ recipe.name | u.truncate(30, '...') }}</h4>
                             <p class="card-text"><em><small>{{ recipe.createdAt | date("d/m/Y") }}</small></em></p>
-                            <a href="{{ path('recipe_show', {'id': recipe.id}) }}" class="btn btn-primary">Voir la recette</a>
+                            <a href="{{ path('recipe_show', {'id': recipe.id, 'people': recipe.people}) }}" class="btn btn-primary">Voir la recette</a>
                         </div>
                     </div>
                 </div>

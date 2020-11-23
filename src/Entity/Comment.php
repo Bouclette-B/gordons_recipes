@@ -18,8 +18,7 @@ class Comment
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
     private $author;
 
@@ -33,17 +32,23 @@ class Comment
      */
     private $createdAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Recipe::class, inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $recipe;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthor(): ?string
     {
         return $this->author;
     }
 
-    public function setAuthor(?User $author): self
+    public function setAuthor(?string $author): self
     {
         $this->author = $author;
 
@@ -70,6 +75,18 @@ class Comment
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getRecipe(): ?Recipe
+    {
+        return $this->recipe;
+    }
+
+    public function setRecipe(?Recipe $recipe): self
+    {
+        $this->recipe = $recipe;
 
         return $this;
     }

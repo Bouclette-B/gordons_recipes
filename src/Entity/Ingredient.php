@@ -25,27 +25,12 @@ class Ingredient
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Recipe::class, mappedBy="ingredients")
-     * @ORM\JoinTable(
-     *     name="recipe_ingredient",
-     *     joinColumns={
-     *          @ORM\JoinColumn(name="recipe_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *          @ORM\JoinColumn(name="ingredient_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    private $recipes;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Quantity::class, mappedBy="ingredient")
+     * @ORM\OneToMany(targetEntity=Quantity::class, mappedBy="ingredient", orphanRemoval=true)
      */
     private $quantities;
 
     public function __construct()
     {
-        $this->recipes = new ArrayCollection();
         $this->quantities = new ArrayCollection();
     }
 
@@ -67,33 +52,6 @@ class Ingredient
     }
 
     /**
-     * @return Collection|Recipe[]
-     */
-    public function getRecipes(): Collection
-    {
-        return $this->recipes;
-    }
-
-    public function addRecipe(Recipe $recipe): self
-    {
-        if (!$this->recipes->contains($recipe)) {
-            $this->recipes[] = $recipe;
-            $recipe->addIngredient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRecipe(Recipe $recipe): self
-    {
-        if ($this->recipes->removeElement($recipe)) {
-            $recipe->removeIngredient($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Quantity[]
      */
     public function getQuantities(): Collection
@@ -105,7 +63,7 @@ class Ingredient
     {
         if (!$this->quantities->contains($quantity)) {
             $this->quantities[] = $quantity;
-            $quantity->addIngredient($this);
+            $quantity->setIngredient($this);
         }
 
         return $this;
@@ -114,9 +72,16 @@ class Ingredient
     public function removeQuantity(Quantity $quantity): self
     {
         if ($this->quantities->removeElement($quantity)) {
-            $quantity->removeIngredient($this);
+            // set the owning side to null (unless already changed)
+            if ($quantity->getIngredient() === $this) {
+                $quantity->setIngredient(null);
+            }
         }
 
         return $this;
+    }
+
+    public function hydrate(array $ingredient) {
+        $this ->setName($ingredient['name']);
     }
 }
